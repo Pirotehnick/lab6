@@ -1,72 +1,36 @@
-from abc import ABC, abstractmethod
+class Database:
+    def __init__(self, username, password):
+        self._username = username
+        self._password = password
 
-#Single Responsibility Principle(Принцип единственной ответственности). Один класс выполняет только одну работу.
-class TheSupplier:
-    def delivers_food(self):
-        pass
-    def sells_food(self):
-        pass
-    
-class Storekeeper:
-    def accepts_towar(self):
-        pass
-    def pays_delivery(self):
+    def connect(self):
+        # код для подключения к базе данных
         pass
 
-class Chef:
-    def prepares_ingredients(self):
-        pass
-    def starts_cooking(self):
-        pass
-    def dish_ready(self):
-        pass
-#Open-Closed(Принцип открытости/закрытости). Сущности должны быть открыты для расширения, но закрыты для изменения.
-class КeceivingWaiter:
-    def accepted_an_order_from_a_customer(self):
-        pass
-    def passed_the_order_to_the_kitchen(self):
-        pass
-   
-class WaitingWaiter(КeceivingWaiter):
-    def waiting_for_an_order(self):
-        pass
-#Interface Segregation(Принцип разделения интерфейса). Программные сущности не должны зависеть от методов, которые они не используют.
-class Cook(ABC):
-    @abstractmethod
-    def prepares_the_indigrients(self):
-        pass
-    
-    @abstractmethod
-    def prepares(self):
-        pass
-   
-    @abstractmethod
-    def uses_special_equipment(self):
-        pass 
-    
-    @abstractmethod
-    def gives_the_finished_dish(self):
-        pass
-    
-class Confectioner(Cook):
-    def prepares_the_indigrients(self):
-        pass
-    
-    def prepares(self):
-        pass
-    
-    def uses_special_equipment(self):
-        pass
-    
-    def gives_the_finished_dish(self):
+    def disconnect(self):
+        # код для отключения от базы данных
         pass
 
-class TheSushiChef(Cook):
-    def prepares_the_indigrients(self):
-        pass
-    
-    def prepares(self):
-        pass
-    
-    def gives_the_finished_dish(self):
-        pass
+class User:
+    def __init__(self, username, password):
+        self._username = username
+        self._password = password
+        self._db = Database(username, password)
+
+    def login(self):
+        self._db.connect()
+        # проверка имени пользователя и пароля
+        # если успешно, возвращает True, иначе False
+        self._db.disconnect()
+
+class UserRepository:
+    def __init__(self, username, password):
+        self._user = User(username, password)
+
+    def authenticate(self):
+        if self._user.login():
+            # пользователь аутентифицирован, вернуть его профиль
+            return self._user
+        else:
+            # пользователь не найден или неправильный пароль
+            return None
